@@ -44,8 +44,8 @@ export class UserObject {
       })
       .then(() => this._countWords())
       .then(() => this._topWords(topWordsCount))
-      .then(() => this._topSubs(topSubsCount))
-      .then(() => this._convertTopSubFullnames());
+      .then(() => this._topSubs(topSubsCount));
+      /*.then(() => this._convertTopSubFullnames());*/
   }
 
   private _countWords(){

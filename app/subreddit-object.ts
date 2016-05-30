@@ -6,10 +6,10 @@ export class SubredditObject {
 
   Posts : Object[] = [];
   Users : UserObject[] = [];
-  RelatedSubs : Object[] = [];
+  RelatedSubs : Object = {};
   NextId : string;
 
-  constructor(private Subreddit : string, private _redditService : RedditService) {  }
+  constructor(private Subreddit : string, private _redditService : RedditService) { }
 
   posts(){
     return this.Posts;
@@ -20,7 +20,11 @@ export class SubredditObject {
   }
 
   relatedSubs(){
-    return this.RelatedSubs;
+    let arr : Object[] = [];
+    for(let key in this.RelatedSubs){
+      arr.push({key : key});
+    }
+    return arr;
   }
 
   fetchData(){
@@ -40,11 +44,27 @@ export class SubredditObject {
   }
 
   _getRelatedSubs(){
+    let aggregatedUserSubs : Object[] = [];
+    let subCount1 : Object = {};
+    let subCount2 : Object = {};
     for(let i = 0; i < this.Users.length; ++i){
       let userSubs = this.Users[i].topSubs();
-      this.RelatedSubs = this.RelatedSubs.concat(userSubs);
+      aggregatedUserSubs = aggregatedUserSubs.concat(userSubs);
     }
-    console.log(this.RelatedSubs);
+    for(let i = 0; i < aggregatedUserSubs.length; ++i){
+      subCount1[aggregatedUserSubs[i]["key"]] ? subCount1[aggregatedUserSubs[i]["key"]] += aggregatedUserSubs[i]["size"]
+        : subCount1[aggregatedUserSubs[i]["key"]] = aggregatedUserSubs[i]["size"];
+    }
+    for(let key in subCount1){
+      this._redditService.getSubData(key).toPromise()
+        .then((res) => {
+          if(res.data.children.length){
+            let subName = res.data.children[0].data.url;
+            subCount2[subName] ? subCount2[subName] += 1 : subCount2[subName] = 1;
+          }
+        });
+    }
+    this.RelatedSubs = subCount2;
   }
 
   _getSubPosts(start_id : string = undefined){
