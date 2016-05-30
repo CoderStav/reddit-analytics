@@ -12,6 +12,12 @@ import { SubredditObject } from "./subreddit-object";
       <a href="/u/{{user.User}}">{{user.User}}</a>,
     </span>
   </div>
+  <div>
+    <span>Related Subs:</span>
+    <span *ngFor="#sub of SubObject.relatedSubs()">
+      <a href="{{sub.key}}">{{sub.key}}</a>,
+    </span>
+  </div>
   <hr/>
   <h1>Subreddit Breakdown: {{Subreddit}}</h1>
   <div>

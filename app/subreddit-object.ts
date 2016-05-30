@@ -6,16 +6,21 @@ export class SubredditObject {
 
   Posts : Object[] = [];
   Users : UserObject[] = [];
+  RelatedSubs : Object[] = [];
   NextId : string;
 
-  constructor(private Subreddit : string, private _redditService : RedditService) { }
+  constructor(private Subreddit : string, private _redditService : RedditService) {  }
 
   posts(){
     return this.Posts;
   }
 
   users(){
-    return this.Users
+    return this.Users;
+  }
+
+  relatedSubs(){
+    return this.RelatedSubs;
   }
 
   fetchData(){
@@ -30,11 +35,16 @@ export class SubredditObject {
           this.Users.push(user);
           user.fetchData();
         }
-      });
+      })
+      .then(() => setTimeout(() => this._getRelatedSubs(), 5000));
   }
 
-  _getSubsInCommon(){
-
+  _getRelatedSubs(){
+    for(let i = 0; i < this.Users.length; ++i){
+      let userSubs = this.Users[i].topSubs();
+      this.RelatedSubs = this.RelatedSubs.concat(userSubs);
+    }
+    console.log(this.RelatedSubs);
   }
 
   _getSubPosts(start_id : string = undefined){

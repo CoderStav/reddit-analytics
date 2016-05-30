@@ -16,7 +16,7 @@ import { UserObject } from "./user-object";
   <div>
     <span>Top subreddits:</span>
     <span *ngFor="#sub of UserData.topSubs()">
-      <a href="{{sub.key}}" target="_blank">{{sub.key}}</a>
+      <a href="{{sub.key}}">{{sub.key}}</a>
     </span>
   </div>
   <h1>User Breakdown: {{User}}</h1><br/>

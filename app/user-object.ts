@@ -54,7 +54,7 @@ export class UserObject {
 
     for(var i = 0; i < allWords.length; ++i){
       var word : string = allWords[i];
-      this.AllWordCounts[word] ?
+      this.AllWordCounts[word] && word.length > 3 ?
         this.AllWordCounts[word] += 1 : this.AllWordCounts[word] = 1;
     }
   }
@@ -87,8 +87,10 @@ export class UserObject {
       sub = this.TopSubs[i];
       this._redditService.getSubData(sub["key"])
         .toPromise().then((res) => {
-          let subName = res.data.children[0].data.url;
-          newTopSubs.push({key:subName})
+          if(res.data.children.length){
+            let subName = res.data.children[0].data.url;
+            newTopSubs.push({key:subName});
+          }
         });
     }
 
