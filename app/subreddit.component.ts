@@ -15,7 +15,7 @@ import { SubredditObject } from "./subreddit-object";
   <div>
     <span>Related Subs:</span>
     <span *ngFor="#sub of SubObject.relatedSubs()">
-      <a href="{{sub.key}}">{{sub.key}}</a>,
+      <a href="{{sub.key}}">{{sub.key}} : {{sub.val}}</a>,
     </span>
   </div>
   <hr/>
