@@ -1,10 +1,10 @@
 h1 {
   font-size: 1.2em;
-  color: #00602A;
+  color: #083165;
   margin-bottom: 0;
 }
 h2 {
-  color: #00602A;
+  color: #083165;
   font-size: 2em;
   margin-top: 0;
   padding-top: 0;
@@ -47,4 +47,19 @@ nav a.router-link-active {
   background-color: #FFF;
   border-radius: 10px;
   padding: 10px;
+}
+
+.search-form {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  /* bring your own prefixes */
+  transform: translate(-50%, -50%);
+}
+
+@media screen and (max-width:700px) {
+  .page-analytics, .page-posts-container {
+    float: none;
+    width: 100%;
+  }
 }

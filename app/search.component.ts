@@ -5,12 +5,13 @@ import { Router } from "angular2/router";
 @Component({
   selector : "reddit-search",
   template : `
-  <h1>Search Page</h1>
-  <form #data="ngForm" (ngSubmit)="search(data)">
-    <input ngControl="name" placeholder="user/subreddit name" type="text" value="test">
-    <br/>
-    <input type="submit">
-  </form>
+  <div class="search-form">
+    <h1>Reddit Analytics Search</h1><br/>
+    <form #data="ngForm" (ngSubmit)="search(data)">
+      <input ngControl="name" placeholder="user/subreddit name" type="text" value="test">
+      <input type="submit">
+    </form>
+  </div>
   `,
   styleUrls: ['app/app.component.css'],
 })
