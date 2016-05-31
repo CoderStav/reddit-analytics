@@ -21,13 +21,6 @@ export class SubredditObject {
   }
 
   relatedSubs(){
-    /*let arr : Object[] = [];
-    for(let key in this.RelatedSubs){
-      let val = this.RelatedSubs[key];
-      if(val > 10)
-        arr.push({key : key});
-    }
-    return arr;*/
     return this.RelatedSubs.inOrder(10);
   }
 
@@ -37,11 +30,15 @@ export class SubredditObject {
         let subPosts = res.data.children;
         this.Posts = this.Posts.concat(subPosts);
 
+        let usernames : String[] = [];
         for(let i = 0; i < subPosts.length; ++i){
           let authorName = subPosts[i]["data"]["author"];
           let user = new UserObject(authorName, this._redditService);
-          this.Users.push(user);
-          user.fetchData();
+          if(usernames.indexOf(authorName) == -1){
+            this.Users.push(user);
+            usernames.push(user.username());
+            user.fetchData();
+          }
         }
       })
       .then(() => setTimeout(() => this._getRelatedSubs(), 1000));
@@ -49,8 +46,7 @@ export class SubredditObject {
 
   _getRelatedSubs(){
     let aggregatedUserSubs : Object[] = [];
-    let subCount1 : AssociativeArray = new AssociativeArray();
-    let subCount2 : AssociativeArray = new AssociativeArray();
+    let newSubCount : AssociativeArray = new AssociativeArray();
 
     for(let i = 0; i < this.Users.length; ++i){
       let userSubs = this.Users[i].topSubs();
@@ -59,21 +55,11 @@ export class SubredditObject {
 
     for(let i = 0; i < aggregatedUserSubs.length; ++i){
       let sub = aggregatedUserSubs[i];
-      subCount1[sub["key"]] ? subCount1[sub["key"]] += 1
-        : subCount1[sub["key"]] = 1;
+      newSubCount[sub["key"]] ? newSubCount.addToKey(sub["key"], 1)
+        : newSubCount.push(sub["key"], 1);
     }
 
-    for(let key in subCount1){
-      this._redditService.getSubData(key).toPromise()
-        .then((res) => {
-          if(res.data.children.length){
-            let subName = res.data.children[0].data.url;
-            subCount2[subName] = subCount1[key];
-          }
-        });
-    }
-
-    this.RelatedSubs = subCount2;
+    this.RelatedSubs = newSubCount;
   }
 
   _getSubPosts(start_id : string = undefined){

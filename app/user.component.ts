@@ -6,32 +6,43 @@ import { UserObject } from "./user-object";
 @Component({
   selector : "reddit-user",
   template : `
-  <div>
-    <span>Top words:</span>
-    <span *ngFor="#word of UserData.topWords()">
-      {{word.key}},
-    </span>
-  </div>
-  <hr/>
-  <div>
-    <span>Top subreddits:</span>
-    <span *ngFor="#sub of UserData.topSubs()">
-      <a href="{{sub.key}}">{{sub.key}}</a>
-    </span>
-  </div>
   <h1>User Breakdown: {{User}}</h1><br/>
-  <div>
-    <div *ngFor="#comment of UserData.comments()">
-      <a href="{{comment.data.link_url}}" target="_blank">{{comment.data.link_title}}</a>
-      <br/>
-      {{comment.data.body}}
+  <div class="page-analytics">
+    <h1>Analytics</h1>
+    <br/>
+    <div class="page-analytics-data">
+      <span>Top words:</span>
+      <span *ngFor="#word of UserData.topWords()">
+        {{word.key}}: {{word.val}},
+      </span>
       <hr/>
+      <span>Unique words used: {{UserData.uniqueWords()}}</span>
     </div>
-    <div *ngIf="UserData.nextId() != null">
-      <button (click)="getUserComments(User, NextId)">Load more comments</button>
+    <br/>
+    <div class="page-posts">
+      <span>Favorite Subreddits:</span>
+      <span *ngFor="#sub of UserData.topSubs()">
+        <a href="{{sub.key}}">{{sub.key}}</a>
+      </span>
     </div>
   </div>
-  `
+  <div class="page-posts-container">
+    <h1>Content</h1>
+    <br/>
+    <div class="page-posts">
+      <div *ngFor="#comment of UserData.comments()">
+        <a href="{{comment.data.link_url}}" target="_blank">{{comment.data.link_title}}</a>
+        <br/>
+        {{comment.data.body}}
+        <hr/>
+      </div>
+      <div *ngIf="UserData.nextId() != null">
+        <button (click)="getUserComments(User, NextId)">Load more comments</button>
+      </div>
+    </div>
+  </div>
+  `,
+  styleUrls: ['app/app.component.css'],
 })
 
 export class UserComponent implements OnInit {

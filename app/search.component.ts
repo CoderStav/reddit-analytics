@@ -7,16 +7,12 @@ import { Router } from "angular2/router";
   template : `
   <h1>Search Page</h1>
   <form #data="ngForm" (ngSubmit)="search(data)">
-    <!--
-    <label><input type="radio" name="search_type" ngControl="search_type" value=0 checked> Subreddit </label>
-    <label><input type="radio" name="search_type" ngControl="search_type" value=1> User </label>
-    <br/>
-    -->
     <input ngControl="name" placeholder="user/subreddit name" type="text" value="test">
     <br/>
     <input type="submit">
   </form>
   `,
+  styleUrls: ['app/app.component.css'],
 })
 
 export class SearchComponent implements OnInit {
@@ -28,7 +24,7 @@ export class SearchComponent implements OnInit {
   search(data : any){
     const values = data.form._value;
     values.search_type = 0;
-    this._router.navigateByUrl((values.search_type == 0 ? "/user/" : "/subreddit") + values.name);
+    this._router.navigateByUrl("/u/" + values.name);
   }
 
 }

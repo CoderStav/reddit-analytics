@@ -1,5 +1,32 @@
 export class AssociativeArray {
 
+  private _length : number = 0;
+
+  length(){
+    return this._length;
+  }
+
+  push(key : string, val : number){
+    if(key != "_length"){
+      this[key] = val;
+      this._length += 1;
+    }
+  }
+
+  addToKey(key : string, val : number){
+    if(key != "_length"){
+      this[key] += val;
+    }
+  }
+
+  forEach(){
+    let arr : string[] = [];
+    for(let key in this)
+      if(key != "_length")
+        arr.push(key);
+    return arr;
+  }
+
   copy(){
     let that : AssociativeArray = new AssociativeArray();
     for(let key in this){
@@ -14,7 +41,7 @@ export class AssociativeArray {
 
     for(let key in that){
       let val = that[key];
-      if(typeof val == "number"){
+      if(typeof val == "number" && key != "_length"){
         numbersRemain = true;
         if(!(largestKey && largestVal) || largestVal < val){
           largestKey = key;
