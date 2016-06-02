@@ -19,11 +19,15 @@ import { UserObject } from "./user-object";
       <span>Unique words used: {{UserData.uniqueWords()}}</span>
     </div>
     <br/>
-    <div class="page-posts">
+    <div class="page-analytics-data">
       <span>Favorite Subreddits:</span>
       <span *ngFor="#sub of UserData.topSubs()">
         <a href="{{sub.key}}">{{sub.key}}</a>
       </span>
+    </div>
+    <br/>
+    <div class="page-analytics-data">
+      Comment Rate: {{UserData.commentRate()}} comments per day
     </div>
   </div>
   <div class="page-posts-container">
@@ -35,9 +39,6 @@ import { UserObject } from "./user-object";
         <br/>
         {{comment.data.body}}
         <hr/>
-      </div>
-      <div *ngIf="UserData.nextId() != null">
-        <button (click)="getUserComments(User, NextId)">Load more comments</button>
       </div>
     </div>
   </div>

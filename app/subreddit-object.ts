@@ -41,7 +41,7 @@ export class SubredditObject {
           }
         }
       })
-      .then(() => setTimeout(() => this._getRelatedSubs(), 1000));
+      .then(() => setTimeout(() => this._getRelatedSubs(), 3000));
   }
 
   _getRelatedSubs(){

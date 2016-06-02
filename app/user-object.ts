@@ -12,6 +12,8 @@ export class UserObject {
 
   SubCounts : AssociativeArray = new AssociativeArray();
 
+  Dates : number[] = [];
+
   constructor(private User : string, private _redditService : RedditService) { }
 
   username(){
@@ -38,6 +40,10 @@ export class UserObject {
     return this.SubCounts.inOrder(10);
   }
 
+  commentRate(){
+    return (this._calculateCommentRate()/60/60/24).toFixed(2);
+  }
+
   fetchData(topWordsCount : number = 10, topSubsCount : number = 10){
     return this._getUserComments(this.User)
       .then((res) => {
@@ -47,6 +53,7 @@ export class UserObject {
         for(var i = 0; i < this.Comments.length; ++i) {
           this._countSubreddit(this.Comments[i]["data"]["subreddit_id"]);
           this.AllText += this.Comments[i]["data"]["body"];
+          this.Dates.push(this.Comments[i]["data"]["created"]);
         }
       })
       .then(() => this._countWords())
@@ -66,14 +73,15 @@ export class UserObject {
         }
 
         this.SubCounts = newSubCounts;
-      });
+      })
+      .catch((err) => console.log(err));
   }
 
   private _countWords(){
     var allWords : string[] = this.AllText.split(" ");
     this.WordCounts = new AssociativeArray();
 
-    for(var i = 0; i < allWords.length; ++i){
+    for(let i = 0; i < allWords.length; ++i){
       var word : string = allWords[i];
       this.WordCounts[word] && word.length > 3 ?
         this.WordCounts.addToKey(word, 1) : this.WordCounts.push(word, 1);
@@ -83,6 +91,17 @@ export class UserObject {
   private _countSubreddit(subreddit_fullname : string){
     this.SubCounts[subreddit_fullname] ?
       this.SubCounts.addToKey(subreddit_fullname, 1) : this.SubCounts.push(subreddit_fullname, 1)
+  }
+
+  private _calculateCommentRate(){
+    var dateDiffs : number[] = [0];
+    var avg : number;
+
+    for(let i = 1; i < this.Dates.length; ++i)
+      dateDiffs.push(this.Dates[i - 1] - this.Dates[i])
+
+    avg = dateDiffs.reduce((prev, val) => prev + val)/dateDiffs.length;
+    return avg;
   }
 
   private _getUserComments(username : string, start_id : string = undefined){
