@@ -4,16 +4,8 @@ import { Router } from "angular2/router";
 
 @Component({
   selector : "reddit-search",
-  template : `
-  <div class="search-form">
-    <h1>Reddit Analytics Search</h1><br/>
-    <form #data="ngForm" (ngSubmit)="search(data)">
-      <input ngControl="name" placeholder="user/subreddit name" type="text" value="test">
-      <input type="submit">
-    </form>
-  </div>
-  `,
-  styleUrls: ['app/app.component.css'],
+  templateUrl: "templates/search.component.html",
+  styleUrls: ['stylesheets/app.css'],
 })
 
 export class SearchComponent implements OnInit {
@@ -24,8 +16,7 @@ export class SearchComponent implements OnInit {
 
   search(data : any){
     const values = data.form._value;
-    values.search_type = 0;
-    this._router.navigateByUrl("/u/" + values.name);
+    this._router.navigateByUrl(values.name);
   }
 
 }

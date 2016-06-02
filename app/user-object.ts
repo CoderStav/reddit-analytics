@@ -14,6 +14,8 @@ export class UserObject {
 
   Dates : number[] = [];
 
+  Scores : number[] = [0];
+
   constructor(private User : string, private _redditService : RedditService) { }
 
   username(){
@@ -44,6 +46,10 @@ export class UserObject {
     return (this._calculateCommentRate()/60/60/24).toFixed(2);
   }
 
+  averageCommentScore(){
+    return this._calculateAvgCommentScore().toFixed(2);
+  }
+
   fetchData(topWordsCount : number = 10, topSubsCount : number = 10){
     return this._getUserComments(this.User)
       .then((res) => {
@@ -54,6 +60,7 @@ export class UserObject {
           this._countSubreddit(this.Comments[i]["data"]["subreddit_id"]);
           this.AllText += this.Comments[i]["data"]["body"];
           this.Dates.push(this.Comments[i]["data"]["created"]);
+          this.Scores.push(this.Comments[i]["data"]["score"]);
         }
       })
       .then(() => this._countWords())
@@ -100,8 +107,11 @@ export class UserObject {
     for(let i = 1; i < this.Dates.length; ++i)
       dateDiffs.push(this.Dates[i - 1] - this.Dates[i])
 
-    avg = dateDiffs.reduce((prev, val) => prev + val)/dateDiffs.length;
-    return avg;
+    return dateDiffs.reduce((prev, val) => prev + val)/dateDiffs.length;
+  }
+
+  private _calculateAvgCommentScore(){
+    return this.Scores.reduce((prev, val) => prev + val)/this.Scores.length;
   }
 
   private _getUserComments(username : string, start_id : string = undefined){

@@ -9,13 +9,8 @@ import { RedditService } from "./reddit.service";
 
 @Component({
   selector: 'reddit-analytics',
-  template: `
-    <button style="background:none;border:none;" (click)="goHome()"><h1>{{title}}</h1></button>
-    <nav>
-    </nav>
-    <router-outlet></router-outlet>
-  `,
-  styleUrls: ['app/app.component.css'],
+  templateUrl: 'templates/app.component.html',
+  styleUrls: ['stylesheets/app.css'],
   directives: [ROUTER_DIRECTIVES],
   providers: [
     ROUTER_PROVIDERS,
